@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>My Recipy Book</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+    <link rel="stylesheet" href="MyRecipeBook-Resources/fontAwesome/css/all.css">
+    
+</head>
+<body class="body-recipes" onload="getRecipe()">
+    <div class="header">
+        <a href="#" id="back-link">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <img src="MyRecipeBook-Resources/images/logo-text.png">
+    </div>
+    <div id="recipe">
+        <div class="recipe-details" id="output">
+            
+
+                
+        </div>
+
+            
+    </div>
+    
+    <script>
+        var id=getId();
+        //getRecipe();
+        console.log(id);
+        function getId(){
+           
+            var url=window.location.href;
+            var pos=url.search("=");
+            var id=url.slice(pos+1);
+            console.log(id);
+            return id;
+        
+        }
+        function getRecipe(){
+            var rootPath="https://mysite.itvarsity.org/api/recipe-book/";
+            var fullPath=rootPath+"get-recipes/?id="+id;
+            console.log(fullPath);
+            fetch(fullPath)
+                .then(function(response){return response.json();})
+                .then(function(data){
+                    document.getElementById("back-link").href="list-recipy.html?category="+data[0].category;
+                    var output="";
+                    output+=`<img src="${rootPath}uploads/${data[0].image}"/>
+                            <h1>${data[0].title}</h1>
+                            <div class="recipe-details-ingredients">
+                                <h2>Ingredients</h2>
+                                <ul>${data[0].ingredients}</ul>    
+                            </div>
+                            <div class="recipe-details-steps">
+                                <h2>Steps</h2>
+                                <ol>${data[0].method}</ol>    
+                            </div>
+
+                    `;
+                    document.getElementById("output").innerHTML=output;
+                })
+        }
+    </script>
+    
+</body>
+</html>
